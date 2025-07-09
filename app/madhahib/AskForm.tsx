@@ -1,7 +1,11 @@
 "use client";
 import { useState } from "react";
 
-export default function AskForm() {
+type AskFormProps = {
+  madhhab: string;
+};
+
+export default function AskForm({ madhhab }: AskFormProps) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +28,7 @@ export default function AskForm() {
       const res = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, apiKey })
+        body: JSON.stringify({ question, apiKey, madhhab })
       });
       const data = await res.json();
       if (data.answer) {
@@ -43,7 +47,7 @@ export default function AskForm() {
       <textarea
         value={question}
         onChange={e => setQuestion(e.target.value)}
-        placeholder="اكتب سؤالك الفقهي هنا..."
+        placeholder={`اكتب سؤالك الفقهي هنا (${madhhab})...`}
         rows={4}
       />
       <div style={{ margin: "1rem 0" }}>
