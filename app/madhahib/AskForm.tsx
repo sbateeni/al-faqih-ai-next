@@ -11,11 +11,18 @@ type Message = {
   text: string;
 };
 
+const ANSWER_TYPES = [
+  { label: 'قصيرة', value: 'short' },
+  { label: 'طويلة', value: 'long' },
+  { label: 'منفصلة', value: 'separated' },
+];
+
 export default function AskForm({ madhhab }: AskFormProps) {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [answerType, setAnswerType] = useState<'short' | 'long' | 'separated'>('short');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +47,7 @@ export default function AskForm({ madhhab }: AskFormProps) {
       const res = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, apiKey, madhhab })
+        body: JSON.stringify({ question, apiKey, madhhab, answerType })
       });
       const data = await res.json();
       if (data.answer) {
@@ -101,6 +108,31 @@ export default function AskForm({ madhhab }: AskFormProps) {
           </div>
         )}
         <div ref={chatEndRef} />
+      </div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 8, justifyContent: 'center' }}>
+        {ANSWER_TYPES.map(opt => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setAnswerType(opt.value as any)}
+            style={{
+              background: answerType === opt.value ? '#eab308' : '#f3f4f6',
+              color: answerType === opt.value ? '#fff' : '#222',
+              border: answerType === opt.value ? '2px solid #eab308' : '1px solid #d1d5db',
+              borderRadius: 8,
+              padding: '0.3rem 1.1rem',
+              fontWeight: 700,
+              fontSize: '1rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+              outline: 'none',
+              boxShadow: answerType === opt.value ? '0 1px 6px #eab30833' : 'none'
+            }}
+            disabled={loading}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
       <form onSubmit={handleAsk} style={{ display: 'flex', gap: 8 }}>
         <textarea
