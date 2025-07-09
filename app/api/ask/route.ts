@@ -17,7 +17,11 @@ export async function POST(req: NextRequest) {
       contents: question,
     });
     return NextResponse.json({ answer: response.text });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'حدث خطأ أثناء الاتصال بواجهة Gemini' }, { status: 500 });
+  } catch (error: unknown) {
+    let message = 'حدث خطأ أثناء الاتصال بواجهة Gemini';
+    if (error && typeof error === 'object' && 'message' in error && typeof (error as any).message === 'string') {
+      message = (error as any).message;
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 } 

@@ -32,7 +32,7 @@ export default function AskForm() {
         setSuccess(true);
       }
       else setError(data.error || "حدث خطأ غير متوقع.");
-    } catch (err) {
+    } catch {
       setError("فشل الاتصال بالخادم.");
     }
     setLoading(false);
