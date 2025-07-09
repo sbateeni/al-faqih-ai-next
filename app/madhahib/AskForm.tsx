@@ -91,6 +91,9 @@ export default function AskForm({ madhhab }: AskFormProps) {
     fontWeight: 500
   };
 
+  // Media query للهاتف
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+
   return (
     <div style={{ margin: "2rem 0" }}>
       <div style={{
@@ -129,7 +132,7 @@ export default function AskForm({ madhhab }: AskFormProps) {
         )}
         <div ref={chatEndRef} />
       </div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8, justifyContent: 'center' }}>
+      <div style={{ display: isMobile ? 'block' : 'flex', gap: 8, marginBottom: 8, justifyContent: 'center', textAlign: isMobile ? 'center' : undefined }}>
         {ANSWER_TYPES.map(opt => (
           <button
             key={opt.value}
@@ -154,13 +157,24 @@ export default function AskForm({ madhhab }: AskFormProps) {
           </button>
         ))}
       </div>
-      <form onSubmit={handleAsk} style={{ display: 'flex', gap: 8 }}>
+      <form onSubmit={handleAsk} style={{ display: isMobile ? 'block' : 'flex', gap: 8 }}>
         <textarea
           value={question}
           onChange={e => setQuestion(e.target.value)}
           placeholder={`اكتب سؤالك الفقهي هنا (${madhhab})...`}
-          rows={3}
-          style={{ flex: 1, resize: 'none', borderRadius: 14, border: '1.5px solid #eab308', padding: '1.1rem 1.2rem', fontSize: '1.22rem', background: '#f9fafb', fontWeight: 500 }}
+          rows={isMobile ? 4 : 3}
+          style={{
+            flex: 1,
+            resize: 'none',
+            borderRadius: 14,
+            border: '1.5px solid #eab308',
+            padding: isMobile ? '1.3rem 1.1rem' : '1.1rem 1.2rem',
+            fontSize: isMobile ? '1.13rem' : '1.22rem',
+            background: '#f9fafb',
+            fontWeight: 500,
+            width: isMobile ? '100%' : undefined,
+            marginBottom: isMobile ? 10 : undefined
+          }}
           disabled={loading}
         />
         <button type="submit" disabled={loading || !question.trim()} style={{ minWidth: 80 }}>
