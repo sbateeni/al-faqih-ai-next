@@ -129,7 +129,7 @@ export default function AskForm() {
           <button
             key={opt.value}
             type="button"
-            onClick={() => setAnswerType(opt.value as any)}
+            onClick={() => setAnswerType(opt.value as 'short' | 'long' | 'separated')}
             style={{
               background: answerType === opt.value ? '#10b981' : '#f3f4f6',
               color: answerType === opt.value ? '#fff' : '#222',

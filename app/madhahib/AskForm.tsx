@@ -134,7 +134,7 @@ export default function AskForm({ madhhab }: AskFormProps) {
           <button
             key={opt.value}
             type="button"
-            onClick={() => setAnswerType(opt.value as any)}
+            onClick={() => setAnswerType(opt.value as 'short' | 'long' | 'separated')}
             style={{
               background: answerType === opt.value ? '#eab308' : '#f3f4f6',
               color: answerType === opt.value ? '#fff' : '#222',
