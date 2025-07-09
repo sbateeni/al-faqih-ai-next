@@ -19,6 +19,7 @@ export default function AskForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [answerType, setAnswerType] = useState<'short' | 'long' | 'separated'>('short');
+  const [showApiKeyAlert, setShowApiKeyAlert] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,10 +33,12 @@ export default function AskForm() {
     setError("");
     const apiKey = localStorage.getItem("apiKey") || "";
     if (!apiKey) {
-      setError("يرجى إدخال مفتاح الـ API أولاً.");
+      setShowApiKeyAlert(true);
+      setError("");
       setLoading(false);
       return;
     }
+    setShowApiKeyAlert(false);
     setMessages((prev) => [...prev, { role: "user", text: question }]);
     setQuestion("");
     try {
@@ -167,16 +170,29 @@ export default function AskForm() {
             fontSize: isMobile ? '1.13rem' : '1.22rem',
             background: '#f9fafb',
             fontWeight: 500,
-            width: isMobile ? '100%' : undefined,
+            width: '100%',
             marginBottom: isMobile ? 10 : undefined
           }}
           disabled={loading}
         />
-        <button type="submit" disabled={loading || !question.trim()} style={{ minWidth: 80 }}>
+        <button type="submit" disabled={loading || !question.trim()} style={{ minWidth: isMobile ? '100%' : 80, width: isMobile ? '100%' : undefined, padding: isMobile ? '1.1rem' : undefined, fontSize: isMobile ? '1.13rem' : undefined }}>
           {loading ? "...انتظر" : "إرسال"}
         </button>
       </form>
+      {showApiKeyAlert && (
+        <div style={{ background: '#fee2e2', color: '#b91c1c', borderRadius: 10, padding: '1rem', margin: '1rem 0', fontWeight: 700, textAlign: 'center' }}>
+          يرجى إدخال مفتاح Gemini API أولاً من صفحة <a href="/api-key" style={{ color: '#2563eb', textDecoration: 'underline' }}>مفتاح API</a>
+        </div>
+      )}
       {error && <div className="alert">{error}</div>}
+      <style jsx>{`
+        @media (max-width: 600px) {
+          textarea, button {
+            width: 100% !important;
+            font-size: 1.13rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 } 
