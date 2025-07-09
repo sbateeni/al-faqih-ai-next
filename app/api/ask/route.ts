@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenAI } from '@google/genai';
 
 export async function POST(req: NextRequest) {
   const { question, apiKey } = await req.json();
 
-  // هنا يمكنك ربط مزود الذكاء الاصطناعي الحقيقي (OpenAI أو غيره)
-  // حالياً نعيد إجابة وهمية
-  if (!apiKey) {
+  // استخدم مفتاح البيئة إذا لم يُرسل apiKey في الطلب
+  const GEMINI_API_KEY = apiKey || process.env.GEMINI_API_KEY;
+  if (!GEMINI_API_KEY) {
     return NextResponse.json({ error: 'مطلوب مفتاح API' }, { status: 400 });
   }
 
-  return NextResponse.json({
-    answer: `إجابة وهمية لسؤالك: "${question}" (المفتاح: ${apiKey.slice(0, 4)}...)`
-  });
+  try {
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash-001',
+      contents: question,
+    });
+    return NextResponse.json({ answer: response.text });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || 'حدث خطأ أثناء الاتصال بواجهة Gemini' }, { status: 500 });
+  }
 } 
