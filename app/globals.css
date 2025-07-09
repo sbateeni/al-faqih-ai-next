@@ -1,0 +1,249 @@
+/****************************
+  الخطوط والألوان الأساسية
+*****************************/
+:root {
+  --primary: #0070f3;
+  --primary-dark: #005bb5;
+  --gold: #ffd700;
+  --background: #fafafa;
+  --foreground: #222;
+  --border: #e5e7eb;
+  --radius: 12px;
+  --shadow: 0 2px 12px #0001;
+  --input-bg: #fff;
+  --input-border: #d1d5db;
+  --input-focus: #0070f3;
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+body {
+  direction: rtl;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Cairo', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/****************************
+  شريط التنقل والشعار
+*****************************/
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, var(--primary) 60%, var(--gold) 100%);
+  color: #fff;
+  padding: 0.7rem 2rem;
+  box-shadow: 0 2px 8px #0002;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 1px 2px #0002);
+}
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.navbar nav {
+  display: flex;
+  gap: 1.5rem;
+}
+.navbar a {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.navbar a:hover, .navbar a:focus {
+  background: rgba(255,255,255,0.13);
+  color: var(--gold);
+}
+
+.moon-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.navbar img[alt="مصحف"] {
+  width: 22px;
+  height: 22px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/****************************
+  محتوى الصفحة والفوتر
+*****************************/
+.content-area {
+  min-height: 70vh;
+}
+.footer-bar {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem 0 1rem 0;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+  border-top: 3px solid var(--primary);
+}
+
+main {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 1.5rem;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+nav {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+/****************************
+  الأزرار
+*****************************/
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 1px 4px #0001;
+}
+button:hover, button:focus {
+  background: var(--primary-dark);
+}
+button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/****************************
+  الحقول والنماذج
+*****************************/
+input[type="text"], textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  margin-bottom: 1rem;
+  transition: border 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+input[type="text"]:focus, textarea:focus {
+  border-color: var(--input-focus);
+  outline: none;
+}
+
+/****************************
+  صناديق الإجابة والتنبيه
+*****************************/
+.answer-box {
+  background: linear-gradient(90deg, #f0f4ff 80%, #fffbe6 100%);
+  border: 1px solid #dbeafe;
+  color: #1e293b;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  box-shadow: 0 1px 6px #0001;
+}
+.alert {
+  color: #fff;
+  background: var(--danger);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+.success {
+  color: #fff;
+  background: var(--success);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+/****************************
+  استجابة الهواتف
+*****************************/
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.7rem 0.5rem;
+  }
+  .logo-text {
+    font-size: 1.1rem;
+  }
+  .content-area {
+    padding: 0 0.2rem;
+  }
+  main {
+    padding: 1rem 0.3rem;
+  }
+  nav {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  input[type="text"], textarea {
+    font-size: 1rem;
+    padding: 0.5rem 0.7rem;
+  }
+  button {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
