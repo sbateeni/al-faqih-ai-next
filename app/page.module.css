@@ -166,3 +166,63 @@ a.secondary {
     filter: invert();
   }
 }
+
+.madhhab-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 1rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  transition: color 0.2s, transform 0.2s;
+}
+.madhhab-link:hover {
+  color: #eab308;
+  transform: scale(1.07);
+}
+.madhhab-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fffbe6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 6px #0001;
+  border: 2px solid #eab308;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.madhhab-link:hover .madhhab-icon {
+  box-shadow: 0 2px 12px #eab30855;
+  border: 2px solid #eab308;
+}
+
+.quran-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 1rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  transition: color 0.2s, transform 0.2s;
+}
+.quran-link:hover {
+  color: #10b981;
+  transform: scale(1.07);
+}
+.quran-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e0f7f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 6px #0001;
+  border: 2px solid #10b981;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.quran-link:hover .quran-icon {
+  box-shadow: 0 2px 12px #10b98155;
+  border: 2px solid #10b981;
+}
