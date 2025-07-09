@@ -61,6 +61,36 @@ export default function AskForm({ madhhab }: AskFormProps) {
     setLoading(false);
   };
 
+  // أنماط عصرية للفقاعات
+  const userBubbleStyle = {
+    background: 'linear-gradient(90deg, #e0e7ff 80%, #c7d2fe 100%)',
+    color: '#222',
+    borderRadius: 18,
+    padding: '1.1rem 1.4rem',
+    maxWidth: '80%',
+    boxShadow: '0 2px 12px #6366f133',
+    fontSize: '1.22rem',
+    textAlign: 'right' as const,
+    whiteSpace: 'pre-line' as const,
+    marginBottom: 6,
+    marginTop: 6,
+    fontWeight: 500
+  };
+  const aiBubbleStyle = {
+    background: 'linear-gradient(90deg, #fffbe6 80%, #fef9c3 100%)',
+    color: '#222',
+    borderRadius: 18,
+    padding: '1.1rem 1.4rem',
+    maxWidth: '80%',
+    boxShadow: '0 2px 12px #eab30822',
+    fontSize: '1.22rem',
+    textAlign: 'right' as const,
+    whiteSpace: 'pre-line' as const,
+    marginBottom: 6,
+    marginTop: 6,
+    fontWeight: 500
+  };
+
   return (
     <div style={{ margin: "2rem 0" }}>
       <div style={{
@@ -82,27 +112,17 @@ export default function AskForm({ madhhab }: AskFormProps) {
           <div key={idx} style={{
             display: 'flex',
             justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-            marginBottom: 8
+            marginBottom: 14,
+            marginTop: 8
           }}>
-            <div style={{
-              background: msg.role === 'user' ? '#e0e7ff' : '#fffbe6',
-              color: '#222',
-              borderRadius: 12,
-              padding: '0.7rem 1rem',
-              maxWidth: '80%',
-              boxShadow: msg.role === 'user' ? '0 1px 4px #6366f155' : '0 1px 4px #eab30822',
-              fontSize: '1.05rem',
-              direction: 'rtl',
-              textAlign: 'right',
-              whiteSpace: 'pre-line'
-            }}>
+            <div style={msg.role === 'user' ? userBubbleStyle : aiBubbleStyle} dir="rtl">
               {msg.text}
             </div>
           </div>
         ))}
         {loading && (
-          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 8 }}>
-            <div style={{ background: '#fffbe6', color: '#222', borderRadius: 12, padding: '0.7rem 1rem', maxWidth: '80%', fontSize: '1.05rem', opacity: 0.7 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 14, marginTop: 8 }}>
+            <div style={{ ...aiBubbleStyle, opacity: 0.7 }}>
               ...انتظر الإجابة
             </div>
           </div>
@@ -139,8 +159,8 @@ export default function AskForm({ madhhab }: AskFormProps) {
           value={question}
           onChange={e => setQuestion(e.target.value)}
           placeholder={`اكتب سؤالك الفقهي هنا (${madhhab})...`}
-          rows={2}
-          style={{ flex: 1, resize: 'none', borderRadius: 8, border: '1px solid #d1d5db', padding: '0.5rem 0.8rem', fontSize: '1rem' }}
+          rows={3}
+          style={{ flex: 1, resize: 'none', borderRadius: 14, border: '1.5px solid #eab308', padding: '1.1rem 1.2rem', fontSize: '1.22rem', background: '#f9fafb', fontWeight: 500 }}
           disabled={loading}
         />
         <button type="submit" disabled={loading || !question.trim()} style={{ minWidth: 80 }}>
