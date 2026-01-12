@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
+import { useAskAgent } from "../hooks/useAskAgent";
+import ChatBubble from "../components/ChatBubble";
+import AnswerTypeSelector from "../components/AnswerTypeSelector";
+import ApiKeyAlert from "../components/ApiKeyAlert";
+import LoadingDots from "../components/LoadingDots";
 
 type AskFormProps = {
   madhhab: string;
-};
-
-type Message = {
-  role: "user" | "ai";
-  text: string;
 };
 
 const ANSWER_TYPES = [
@@ -19,49 +19,15 @@ const ANSWER_TYPES = [
 
 export default function AskForm({ madhhab }: AskFormProps) {
   const [question, setQuestion] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [answerType, setAnswerType] = useState<'short' | 'long' | 'separated'>('short');
-  const [showApiKeyAlert, setShowApiKeyAlert] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  const { messages, loading, error, showApiKeyAlert, chatEndRef, ask } = useAskAgent();
 
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim()) return;
-    setLoading(true);
-    setError("");
-    const apiKey = localStorage.getItem("apiKey") || "";
-    if (!apiKey) {
-      setShowApiKeyAlert(true);
-      setError("");
-      setLoading(false);
-      return;
-    }
-    setShowApiKeyAlert(false);
-    // أضف رسالة المستخدم
-    setMessages((prev) => [...prev, { role: "user", text: question }]);
-    setQuestion("");
-    try {
-      const res = await fetch("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, apiKey, madhhab, answerType })
-      });
-      const data = await res.json();
-      if (data.answer) {
-        setMessages((prev) => [...prev, { role: "ai", text: data.answer }]);
-      } else {
-        setError(data.error || "حدث خطأ غير متوقع.");
-      }
-    } catch {
-      setError("فشل الاتصال بالخادم.");
-    }
-    setLoading(false);
+    await ask(question, { madhhab, answerType });
+    setQuestion('');
   };
 
   // أنماط عصرية للفقاعات
@@ -115,51 +81,18 @@ export default function AskForm({ madhhab }: AskFormProps) {
           </div>
         )}
         {messages.map((msg, idx) => (
-          <div key={idx} style={{
-            display: 'flex',
-            justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-            marginBottom: 14,
-            marginTop: 8
-          }}>
-            <div style={msg.role === 'user' ? userBubbleStyle : aiBubbleStyle} dir="rtl">
-              {msg.text}
-            </div>
-          </div>
+          <ChatBubble key={idx} msg={msg} />
         ))}
         {loading && (
           <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 14, marginTop: 8 }}>
-            <div style={{ ...aiBubbleStyle, opacity: 0.7 }}>
-              ...انتظر الإجابة
+            <div style={{ ...aiBubbleStyle, opacity: 0.9 }}>
+              <LoadingDots />
             </div>
           </div>
         )}
         <div ref={chatEndRef} />
       </div>
-      <div style={{ display: isMobile ? 'block' : 'flex', gap: 8, marginBottom: 8, justifyContent: 'center', textAlign: isMobile ? 'center' : undefined }}>
-        {ANSWER_TYPES.map(opt => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setAnswerType(opt.value as 'short' | 'long' | 'separated')}
-            style={{
-              background: answerType === opt.value ? '#eab308' : '#f3f4f6',
-              color: answerType === opt.value ? '#fff' : '#222',
-              border: answerType === opt.value ? '2px solid #eab308' : '1px solid #d1d5db',
-              borderRadius: 8,
-              padding: '0.3rem 1.1rem',
-              fontWeight: 700,
-              fontSize: '1rem',
-              cursor: 'pointer',
-              transition: 'all 0.15s',
-              outline: 'none',
-              boxShadow: answerType === opt.value ? '0 1px 6px #eab30833' : 'none'
-            }}
-            disabled={loading}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
+      <AnswerTypeSelector value={answerType} onChange={(v) => setAnswerType(v as 'short' | 'long' | 'separated')} disabled={loading} />
       <form onSubmit={handleAsk} style={{ display: isMobile ? 'block' : 'flex', gap: 8 }}>
         <textarea
           value={question}
@@ -184,11 +117,7 @@ export default function AskForm({ madhhab }: AskFormProps) {
           {loading ? "...انتظر" : "إرسال"}
         </button>
       </form>
-      {showApiKeyAlert && (
-        <div style={{ background: '#fee2e2', color: '#b91c1c', borderRadius: 10, padding: '1rem', margin: '1rem 0', fontWeight: 700, textAlign: 'center' }}>
-          يرجى إدخال مفتاح Gemini API أولاً من صفحة <a href="/api-key" style={{ color: '#2563eb', textDecoration: 'underline' }}>مفتاح API</a>
-        </div>
-      )}
+      {showApiKeyAlert && <ApiKeyAlert /> }
       {error && <div className="alert">{error}</div>}
       <style jsx>{`
         @media (max-width: 600px) {
